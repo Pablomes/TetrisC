@@ -66,10 +66,13 @@ void destroyPiece(Piece* piece) {
     if (piece->blocks == NULL) { return; }
 
     for (int i = 0; i < 4; i++) {
+        if (piece->blocks[i] == NULL) { continue; }
         destroyBlock(piece->blocks[i]);
+        piece->blocks[i] = NULL;
     }
 
     free(piece->blocks);
+    piece->blocks = NULL;
     free(piece);
 }
 

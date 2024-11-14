@@ -857,34 +857,53 @@ int updatePiece(Piece* piece, int dir, int drop, int** board, int height, int wi
 
 void freeEverything(int height, int gamemode) {
     destroyPiece(piece);
+    piece = NULL;
+
     if (board != NULL) {
         for (int i = 0; i < height; i++) {
+            if (board[i] == NULL) { continue; }
             free(board[i]);
+            board[i] = NULL;
         }
 
         free(board);
+        board = NULL;
     }
-    free(buff);
+    if (buff != NULL) {
+        free(buff);
+        buff = NULL;
+    }
 
-    
+    if (pieces != NULL) {
+        free(pieces);
+        pieces = NULL;
+    }
 
-    free(pieces);
-
-    free(inputs);
+    if (inputs != NULL) {
+        free(inputs);
+        inputs = NULL;
+    }
 
     if (gamemode == 0) { return; }
 
     destroyPiece(piece2);
+    piece2 = NULL;
 
-    free(pieces2);
+    if (pieces2 != NULL) {
+        free(pieces2);
+        pieces2 = NULL;
+    }
 
     if (board2 == NULL) { return; }
 
     for (int i = 0; i < height; i++) {
+        if (board2[i] == NULL) { continue; }
         free(board2[i]);
+        board2[i] = NULL;
     }
 
     free(board2);
+    board2 = NULL;
 }
 
 int calcRubbish(int lines) {

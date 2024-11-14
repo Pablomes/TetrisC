@@ -3,7 +3,7 @@
 void handleSignal(int signal) {
     if (signal == SIGINT) {
         clearConsole();
-        printf("FORCED INTERRUPT DETECTED. CLEANING UP.");
+        printf("\n\nFORCED INTERRUPT DETECTED. CLEANING UP.");
         freeEverything(20, 1);
         printf("\n\nDONE. GOODBYE!!!");
         showCursor();

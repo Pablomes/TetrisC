@@ -638,8 +638,8 @@ void render2Player(Piece* piece1, Piece* piece2, int** board1, int** board2, cha
     cnt += sprintf(buff + cnt, "\n\n");
     cnt += sprintf(buff + cnt, "\t\t PLAYER 1    \t\t\t\t\t\t\t\t\t\t PLAYER 2\n");
     cnt += sprintf(buff + cnt, "\t\t A / W   MOVE\t\t\t\t\t\t\t\t\t\t <- ->   MOVE\n");
-    cnt += sprintf(buff + cnt, "\t\t S       SOFT DROP\t\t\t\t\t\t\t\t\t\t DOWN    SOFT DROP\n");
-    cnt += sprintf(buff + cnt, "\t\t SPACE   HARD DROP\t\t\t\t\t\t\t\t\t\t L       HARD DROP\n");
+    cnt += sprintf(buff + cnt, "\t\t S       SOFT DROP\t\t\t\t\t\t\t\t\t DOWN    SOFT DROP\n");
+    cnt += sprintf(buff + cnt, "\t\t SPACE   HARD DROP\t\t\t\t\t\t\t\t\t L       HARD DROP\n");
     cnt += sprintf(buff + cnt, "\t\t W / C   ROTATE\t\t\t\t\t\t\t\t\t\t K / UP  ROTATE\n");
     cnt += sprintf(buff + cnt, "\t\t B       HOLD\t\t\t\t\t\t\t\t\t\t J       HOLD\n");
 
