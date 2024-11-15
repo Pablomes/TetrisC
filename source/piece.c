@@ -1,5 +1,6 @@
 #include "piece.h"
 
+// does this need to be allocated on the heap?
 Block* createBlock(int x, int y) {
     Block* res = (Block*) malloc(sizeof(Block));
 
@@ -13,6 +14,7 @@ Block* createBlock(int x, int y) {
     return res;
 }
 
+// do you need a function for this?
 void destroyBlock(Block* block) {
     free(block);
 }
@@ -36,6 +38,7 @@ Piece* createPiece(int x, int y) {
     }
 
     for (int i = 0; i < 4; i++) {
+        // this could be just a 1D array and creating it would be a single malloc/calloc
         res->blocks[i] = createBlock(0, 0);
 
         if (res->blocks[i] == NULL) {

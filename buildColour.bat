@@ -1,12 +1,10 @@
 @echo off
 
-gcc -Wall -Wextra -c ./sourceColour/tetris.c -o ./sourceColour/tetris.o
-gcc -Wall -Wextra -c ./sourceColour/gamelogic.c -o ./sourceColour/gamelogic.o
-gcc -Wall -Wextra -c ./sourceColour/piece.c -o ./sourceColour/piece.o
-gcc -Wall -Wextra -c ./sourceColour/renderer.c -o ./sourceColour/renderer.o
-gcc -Wall -Wextra -c ./sourceColour/utils.c -o ./sourceColour/utils.o
-gcc -Wall -Wextra -c ./sourceColour/signalhandler.c -o ./sourceColour/signalhandler.o
+gcc -Wall -Wextra -ggdb3 ./source/color/tetris.c -o CTetrisColour.exe
 
-gcc ./sourceColour/tetris.o ./sourceColour/gamelogic.o ./sourceColour/piece.o ./sourceColour/renderer.o ./sourceColour/utils.o ./sourceColour/signalhandler.o -o CTetrisColour.exe
+::set opts=-FC -GR- -EHa- -W4 -nologo -Zi -D_CRT_SECURE_NO_WARNINGS
+::cl %opts% .\source\color\tetris.c -FeCTetrisColour.exe /link user32.lib -incremental:no
 
-del sourceColour\*.o
+:: *.o for gcc, *.obj for cl
+del source\color\*.o 2> NUL
+del .\*.obj 2> NUL 
