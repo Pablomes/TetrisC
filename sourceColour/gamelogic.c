@@ -576,7 +576,7 @@ int spawnPiece(Piece* piece, int** board, PieceType* pieces, int hold, int heigh
         case S_BLOCK:
         case RS_BLOCK:
         case SQUARE:
-            if (board[1][width / 2] == 1 || board[1][width / 2 + 1] == 1 || board[1][width / 2 - 1] == 1) {
+            if (board[1][width / 2] != 0 || board[1][width / 2 + 1] != 0 || board[1][width / 2 - 1] != 0) {
                 movePiece(piece, width / 2, 0);
             } else {
                 movePiece(piece, width / 2, 1);
@@ -629,7 +629,7 @@ void rotatePiece(Piece* piece, int dir, int** board, int height, int width) { //
                 int xPos = piece->blocks[i]->x + piece->x - xOffset;
                 int yPos = piece->blocks[i]->y + piece->y - yOffset;
 
-                if (yPos >= height || yPos < 0 || xPos >= width || xPos < 0 || board[yPos][xPos] == 1) {
+                if (yPos >= height || yPos < 0 || xPos >= width || xPos < 0 || board[yPos][xPos] != 0) {
                     formPiece(piece, H_LINE);
                     return;
                 }
@@ -667,7 +667,7 @@ void rotatePiece(Piece* piece, int dir, int** board, int height, int width) { //
                 int xPos = piece->blocks[i]->x + piece->x - xOffset;
                 int yPos = piece->blocks[i]->y + piece->y - yOffset;
 
-                if (yPos >= height || yPos < 0 || xPos >= width || xPos < 0 || board[yPos][xPos] == 1) {
+                if (yPos >= height || yPos < 0 || xPos >= width || xPos < 0 || board[yPos][xPos] != 0) {
                     formPiece(piece, V_LINE);
                     return;
                 }
@@ -714,7 +714,7 @@ void rotatePiece(Piece* piece, int dir, int** board, int height, int width) { //
                 int xPos = piece->blocks[i]->x + piece->x - xOffset;
                 int yPos = piece->blocks[i]->y + piece->y - yOffset;
 
-                if (yPos >= height || yPos < 0 || xPos >= width || xPos < 0 || board[yPos][xPos] == 1) {
+                if (yPos >= height || yPos < 0 || xPos >= width || xPos < 0 || board[yPos][xPos] != 0) {
                     for (int j = 0; j < 4; j++) {
                         int temp = piece->blocks[j]->x;
                         piece->blocks[j]->x = piece->blocks[j]->y * dir;
