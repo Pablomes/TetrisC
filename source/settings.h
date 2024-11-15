@@ -4,8 +4,10 @@
 // this is fine, but it won't get saved in the executable if you change it during execution,
 // if you want to have it save you might need to use a non-code file there's also probably
 // a way to actually save it in the executable, if you want to look for it 
-const int width = 10;
-const int height = 20;
+
+// these get hidden by local variables called width/height
+const int gameWidth = 10;
+const int gameHeight = 20;
 double timeForDrop;
 double timeForDrop2;
 const double updateTime = (double)1 / (double)60;

@@ -2,16 +2,16 @@
 
 // PLAYER 1
 
-int* board = NULL;
-Piece* piece = NULL;
+int* glob_board = NULL;
+Piece* glob_piece = NULL;
 char* buff = NULL;
-PieceType* pieces = NULL;
+PieceType* glob_pieces = NULL;
 
 int level = -1;
 int spawn = 1;
 int pieceIdx = 0;
 int score = 0;
-int linesCleared = 0;
+int glob_linesCleared = 0; // gets hidden by local declarations
 int holdPiece = -1;
 int changed = 0;
 int rubbish = 0;
@@ -41,20 +41,20 @@ double speeds[30] = {48, 43, 38, 33, 28, 23, 18, 13, 8, 6, 5, 5, 5, 4, 4, 4, 3, 
 
 int initialiseMem(int height, int width) {
     // calloc clears to 0
-    board = (int*) calloc(width * height, sizeof(int));
+    glob_board = (int*) calloc(width * height, sizeof(int));
     
-    if (board == NULL) {
+    if (glob_board == NULL) {
         printf("ERROR ALLOCATING MEMORY.");
 
         return -1;
     }
 
-    piece = createPiece(0, 0);
+    glob_piece = createPiece(0, 0);
 
-    if (piece == NULL) {
+    if (glob_piece == NULL) {
         printf("ERROR ALLOCATING MEMORY.");
 
-        free(board);
+        free(glob_board);
         return -1;
     }
 
@@ -62,19 +62,19 @@ int initialiseMem(int height, int width) {
 
     if (buff == NULL) {
         printf("ERROR ALLOCATING MEMORY.");
-        destroyPiece(piece);
+        destroyPiece(glob_piece);
 
-        free(board);
+        free(glob_board);
         return -1;
     }
 
-    pieces = (PieceType*) malloc(sizeof(PieceType) * 14);
+    glob_pieces = (PieceType*) malloc(sizeof(PieceType) * 14);
 
-    if (pieces == NULL) {
+    if (glob_pieces == NULL) {
         printf("ERROR ALLOCATING MEMORY.\n");
-        destroyPiece(piece);
+        destroyPiece(glob_piece);
 
-        free(board);
+        free(glob_board);
         free(buff);
         return -1;
     }
@@ -83,12 +83,12 @@ int initialiseMem(int height, int width) {
 
     if (inputs == NULL) {
         printf("ERROR ALLOCATING MEMORY.\n");
-        destroyPiece(piece);
+        destroyPiece(glob_piece);
 
-        free(board);
+        free(glob_board);
         free(buff);
 
-        free(pieces);
+        free(glob_pieces);
 
         return -1;
     }
@@ -97,7 +97,7 @@ int initialiseMem(int height, int width) {
 }
 
 int initialiseMemPlayer2(int height, int width) {
-    board = (int*) calloc(width * height, sizeof(int));
+    board2 = (int*) calloc(width * height, sizeof(int));
 
     if (board2 == NULL) {
         printf("ERROR ALLOCATING MEMORY.");
@@ -138,7 +138,7 @@ int initialiseMemPlayer2(int height, int width) {
 
 int initialiseGame(int height, int width) {
     for (int i = 0; i < 14; i++) {
-        pieces[i] = i % 7;
+        glob_pieces[i] = i % 7;
     }
 
     memset(inputs, 0, sizeof(int) * 8);
@@ -149,15 +149,15 @@ int initialiseGame(int height, int width) {
     spawn = 1;
     pieceIdx = 0;
     score = 0;
-    linesCleared = 0;
+    glob_linesCleared = 0;
     holdPiece = -1;
     changed = 0;
 
-    shufflePieces(pieces, 1);
+    shufflePieces(glob_pieces, 1);
 
-    shufflePieces(pieces, 2);
+    shufflePieces(glob_pieces, 2);
 
-    memset(board, 0, sizeof(board[0])*width*height);
+    memset(glob_board, 0, sizeof(glob_board[0])*width*height);
 
     return 0;
 }
@@ -790,21 +790,21 @@ int updatePiece(Piece* piece, int dir, int drop, int* board, int height, int wid
 }
 
 void freeEverything(int gamemode) {
-    destroyPiece(piece);
-    piece = NULL;
+    destroyPiece(glob_piece);
+    glob_piece = NULL;
 
-    if (board != NULL) {
-        free(board);
-        board = NULL;
+    if (glob_board != NULL) {
+        free(glob_board);
+        glob_board = NULL;
     }
     if (buff != NULL) {
         free(buff);
         buff = NULL;
     }
 
-    if (pieces != NULL) {
-        free(pieces);
-        pieces = NULL;
+    if (glob_pieces != NULL) {
+        free(glob_pieces);
+        glob_pieces = NULL;
     }
 
     if (inputs != NULL) {

@@ -1,5 +1,5 @@
 #ifndef GAMELOGIC_H
-#define GAME_LOGIC_H
+#define GAMELOGIC_H // me cago en ti
 
 #include "utils.h"
 #include <conio.h>
@@ -7,43 +7,32 @@
 #include <windows.h>
 
 // PLAYER 1
-extern int* board;
-extern Piece* piece;
-extern char* buff;
-extern PieceType* pieces;
-
-extern int level;
-extern int spawn;
-extern int pieceIdx;
-extern int score;
-extern int linesCleared;
-extern int holdPiece;
-extern int changed;
-extern int rubbish;
-
-// PLAYER 2
-
-extern int* board2;
-extern Piece* piece2;
-extern char* buff2;
-extern PieceType* pieces2;
-
-extern int level2;
-extern int spawn2;
-extern int pieceIdx2;
-extern int score2;
-extern int linesCleared2;
-extern int holdPiece2;
-extern int changed2;
-extern int rubbish2;
+typedef struct {
+    int* board;
+    Piece* piece;
+    char* buff;
+    PieceType* pieces;
+    int level;
+    int spawn;
+    int pieceIdx;
+    int score;
+    int linesCleared;
+    int holdPiece;
+    int changed;
+    int rubbish;
+} Player;
 
 // SHARED
 
-extern int twoPlayer;
-extern int winner;
-extern int* inputs;
-extern int running;
-extern double speeds[30];
+typedef struct {
+    int twoPlayer;
+    int winner;
+    int *inputs;
+    int running;
+    double speeds[30];
+
+    Player players[2];
+} GameData;
 
 int initialiseMem(int height, int width);
 

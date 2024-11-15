@@ -2,12 +2,13 @@
 #include <stdlib.h>
 #include <conio.h>
 #include <time.h>
-#include "utils.h"
-#include "piece.h"
-#include "renderer.h"
-#include "gamelogic.h"
 #include "settings.h"
-#include "signalhandler.h"
+
+#include "utils.c"
+#include "piece.c"
+#include "renderer.c"
+#include "gamelogic.c"
+#include "signalhandler.c"
 
 int main(void) {
     setupSignalHandler();
@@ -18,7 +19,7 @@ int main(void) {
 
 mainMenu:
 
-    int memRes = initialiseMem(height, width);
+    int memRes = initialiseMem(gameHeight, gameWidth);
 
     if (memRes != 0) {
         return 0;
@@ -27,7 +28,7 @@ mainMenu:
     twoPlayer = showTitle();
 
     if (twoPlayer) {
-        memRes = initialiseMemPlayer2(height, width);
+        memRes = initialiseMemPlayer2(gameHeight, gameWidth);
     }
 
     if (memRes != 0) {
@@ -36,9 +37,9 @@ mainMenu:
 
 startGame:
 
-    initialiseGame(height, width);
+    initialiseGame(gameHeight, gameWidth);
     if (twoPlayer) {
-        initialiseGamePlayer2(height, width);
+        initialiseGamePlayer2(gameHeight, gameWidth);
     }
 
     if (twoPlayer) {
@@ -74,7 +75,7 @@ startGame:
         int dir = 0;
         int dir2 = 0;
 
-        if (linesCleared > (level + 1) * 10) {
+        if (glob_linesCleared > (level + 1) * 10) {
             level++;
         }
 
@@ -126,13 +127,13 @@ startGame:
 
         if (inputs[2] < 0 && spawn == 0) { 
             if (inputs[2] == -2 || (inputs[2] == -1 && sinceRot >= rotateTime)) {
-                rotatePiece(piece, -1, board, height, width); 
+                rotatePiece(glob_piece, -1, glob_board, gameHeight, gameWidth); 
 
                 lastRot = current;
             }
         } else if (inputs[2] > 0 && spawn == 0) {
             if (inputs[2] == 2 || (inputs[2] == 1 && sinceRot >= rotateTime)) {
-                rotatePiece(piece, 1, board, height, width); 
+                rotatePiece(glob_piece, 1, glob_board, gameHeight, gameWidth); 
 
                 lastRot = current;
             }
@@ -141,18 +142,18 @@ startGame:
         if (inputs[3] == 1 && changed == 0 && spawn == 0) {
 
             if (holdPiece != -1) {
-                int temp = piece->type;
-                pieceIdx = spawnPiece(piece, board, pieces, holdPiece, height, width, 1);
+                int temp = glob_piece->type;
+                pieceIdx = spawnPiece(glob_piece, glob_board, glob_pieces, holdPiece, gameHeight, gameWidth, 1);
                 holdPiece = temp;
                 if ((PieceType)holdPiece == V_LINE) {
                     holdPiece = (int) H_LINE;
                 }
             } else {
-                holdPiece = piece->type;
+                holdPiece = glob_piece->type;
                 if ((PieceType)holdPiece == V_LINE) {
                     holdPiece = (int) H_LINE;
                 }
-                pieceIdx = spawnPiece(piece, board, pieces, -1, height, width, 1);
+                pieceIdx = spawnPiece(glob_piece, glob_board, glob_pieces, -1, gameHeight, gameWidth, 1);
                 drop = 0;
                 lastDrop = current;
             }
@@ -182,13 +183,13 @@ startGame:
 
             if (inputs[6] < 0 && spawn2 == 0) { 
                 if (inputs[6] == -2 || (inputs[6] == -1 && sinceRot2 >= rotateTime)) {
-                    rotatePiece(piece2, -1, board2, height, width); 
+                    rotatePiece(piece2, -1, board2, gameHeight, gameWidth); 
 
                     lastRot2 = current;
                 }
             } else if (inputs[6] > 0 && spawn2 == 0) {
                 if (inputs[6] == 2 || (inputs[6] == 1 && sinceRot2 >= rotateTime)) {
-                    rotatePiece(piece2, 1, board2, height, width); 
+                    rotatePiece(piece2, 1, board2, gameHeight, gameWidth); 
 
                     lastRot2 = current;
                 }
@@ -198,7 +199,7 @@ startGame:
 
                 if (holdPiece2 != -1) {
                     int temp = piece2->type;
-                    pieceIdx2 = spawnPiece(piece2, board2, pieces2, holdPiece2, height, width, 2);
+                    pieceIdx2 = spawnPiece(piece2, board2, pieces2, holdPiece2, gameHeight, gameWidth, 2);
                     holdPiece2 = temp;
                     if ((PieceType)holdPiece2 == V_LINE) {
                         holdPiece2 = (int) H_LINE;
@@ -208,7 +209,7 @@ startGame:
                     if ((PieceType)holdPiece2 == V_LINE) {
                         holdPiece2 = (int) H_LINE;
                     }
-                    pieceIdx2 = spawnPiece(piece2, board2, pieces2, -1, height, width, 2);
+                    pieceIdx2 = spawnPiece(piece2, board2, pieces2, -1, gameHeight, gameWidth, 2);
                     drop2 = 0;
                     lastDrop2 = current;
                 }
@@ -220,11 +221,11 @@ startGame:
 
         if (spawn == 1) {
             if (rubbish > 0) {
-                addRubbish(board, rubbish, height, width);
+                addRubbish(glob_board, rubbish, gameHeight, gameWidth);
                 rubbish = 0;
             }
 
-            pieceIdx = spawnPiece(piece, board, pieces, -1, height, width, 1);
+            pieceIdx = spawnPiece(glob_piece, glob_board, glob_pieces, -1, gameHeight, gameWidth, 1);
             spawn = 0;
         } else {
             int res;
@@ -234,10 +235,10 @@ startGame:
             }
 
             if (drop == 1 || drop == -1) {
-                res = updatePiece(piece, dir, drop, board, height, width);
+                res = updatePiece(glob_piece, dir, drop, glob_board, gameHeight, gameWidth);
                 drop = 0;
             } else {
-                res = updatePiece(piece, dir, 0, board, height, width);
+                res = updatePiece(glob_piece, dir, 0, glob_board, gameHeight, gameWidth);
             }
 
             if (res < 0) {
@@ -246,11 +247,11 @@ startGame:
             } else if (res > 0) {
                 // ADD LINES
                 changed = 0;
-                linesCleared += (res - 1);
+                glob_linesCleared += (res - 1);
                 rubbish2 += calcRubbish(res - 1);
                 score += calcScore(res - 1);
 
-                hidePiece(piece);
+                hidePiece(glob_piece);
                 spawn = 1;
             }
         }
@@ -259,11 +260,11 @@ startGame:
 
         if (spawn2 == 1 && twoPlayer) {
             if (rubbish2 > 0) {
-                addRubbish(board2, rubbish2, height, width);
+                addRubbish(board2, rubbish2, gameHeight, gameWidth);
                 rubbish2 = 0;
             }
 
-            pieceIdx2 = spawnPiece(piece2, board2, pieces2, -1, height, width, 2);
+            pieceIdx2 = spawnPiece(piece2, board2, pieces2, -1, gameHeight, gameWidth, 2);
             spawn2 = 0;
         } else if (twoPlayer) {
             int res;
@@ -273,10 +274,10 @@ startGame:
             }
 
             if (drop2 == 1 || drop2 == -1) {
-                res = updatePiece(piece2, dir2, drop2, board2, height, width);
+                res = updatePiece(piece2, dir2, drop2, board2, gameHeight, gameWidth);
                 drop = 0;
             } else {
-                res = updatePiece(piece2, dir2, 0, board2, height, width);
+                res = updatePiece(piece2, dir2, 0, board2, gameHeight, gameWidth);
             }
 
             if (res < 0) {
@@ -297,9 +298,9 @@ startGame:
         if (elapsed >= updateTime) {
 
             if (twoPlayer) {
-                render2Player(piece, piece2, board, board2, buff, score, score2, linesCleared, linesCleared2, level, level2, pieces, pieces2, pieceIdx, pieceIdx2, holdPiece, holdPiece2, rubbish, rubbish2, height, width);
+                render2Player(glob_piece, piece2, glob_board, board2, buff, score, score2, glob_linesCleared, linesCleared2, level, level2, glob_pieces, pieces2, pieceIdx, pieceIdx2, holdPiece, holdPiece2, rubbish, rubbish2, gameHeight, gameWidth);
             } else {
-                render(piece, board, buff, score, linesCleared, level, pieces, pieceIdx, holdPiece, height, width);
+                render(glob_piece, glob_board, buff, score, glob_linesCleared, level, glob_pieces, pieceIdx, holdPiece, gameHeight, gameWidth);
             }
 
             lastUpdate = current;

@@ -742,7 +742,7 @@ char gameOverScreen(int score, int score2, int gamemode, int winner) {
     }
 
     char c;
-    while((c = _getch()) != 'q' && c != '\r' && c != 'm');
+    while((c = (char)_getch()) != 'q' && c != '\r' && c != 'm');
 
     return c;
 }
