@@ -32,7 +32,7 @@ void clearBuffer(char* buffer) {
     memset(buffer, ' ', sizeof(char) * 750);
 }
 
-void render(Piece* piece, int** board, char* buff, int score, int linesCleared, int level, PieceType* pieces, int pieceIdx, int holdPiece, int height, int width) {
+void render(Piece* piece, int* board, char* buff, int score, int linesCleared, int level, PieceType* pieces, int pieceIdx, int holdPiece, int height, int width) {
     int cnt = 0;
     clearBuffer(buff);
 
@@ -41,7 +41,7 @@ void render(Piece* piece, int** board, char* buff, int score, int linesCleared, 
         int y = piece->blocks[i]->y + piece->y;
 
         if (x >= 0 && x < width && y >= 0 && y < height) {
-            board[y][x] = 1;
+            board[y*width + x] = 1;
         }
     }
 
@@ -175,7 +175,7 @@ void render(Piece* piece, int** board, char* buff, int score, int linesCleared, 
         }
 
         for (int j = 0; j < width; j++) {
-            if (board[i][j] == 1) {
+            if (board[i*width + j] == 1) {
                 cnt += sprintf(buff + cnt, "[]");
             } else {
                 cnt += sprintf(buff + cnt, " .");
@@ -250,12 +250,12 @@ void render(Piece* piece, int** board, char* buff, int score, int linesCleared, 
         int y = piece->blocks[i]->y + piece->y;
 
         if (x >= 0 && x < width && y >= 0 && y < height) {
-            board[y][x] = 0;
+            board[y*width + x] = 0;
         }
     }
 }
 
-void render2Player(Piece* piece1, Piece* piece2, int** board1, int** board2, char* buff, int score1, int score2, int linesCleared1, int linesCleared2, int level1, int level2, PieceType* pieces1, PieceType* pieces2, int pieceIdx1, int pieceIdx2, int holdPiece1, int holdPiece2, int rubbish1, int rubbish2, int height, int width) {
+void render2Player(Piece* piece1, Piece* piece2, int* board1, int* board2, char* buff, int score1, int score2, int linesCleared1, int linesCleared2, int level1, int level2, PieceType* pieces1, PieceType* pieces2, int pieceIdx1, int pieceIdx2, int holdPiece1, int holdPiece2, int rubbish1, int rubbish2, int height, int width) {
     int cnt = 0;
     clearBuffer(buff);
 
@@ -264,14 +264,14 @@ void render2Player(Piece* piece1, Piece* piece2, int** board1, int** board2, cha
         int y = piece1->blocks[i]->y + piece1->y;
 
         if (x >= 0 && x < width && y >= 0 && y < height) {
-            board1[y][x] = 1;
+            board1[y*width + x] = 1;
         }
 
         x = piece2->blocks[i]->x + piece2->x;
         y = piece2->blocks[i]->y + piece2->y;
 
         if (x >= 0 && x < width && y >= 0 && y < height) {
-            board2[y][x] = 1;
+            board2[y*width + x] = 1;
         }
     }
 
@@ -523,7 +523,7 @@ void render2Player(Piece* piece1, Piece* piece2, int** board1, int** board2, cha
         }
 
         for (int j = 0; j < width; j++) {
-            if (board1[i][j] == 1) {
+            if (board1[i*width + j] == 1) {
                 cnt += sprintf(buff + cnt, "[]");
             } else {
                 cnt += sprintf(buff + cnt, " .");
@@ -551,7 +551,7 @@ void render2Player(Piece* piece1, Piece* piece2, int** board1, int** board2, cha
         }
 
         for (int j = 0; j < width; j++) {
-            if (board2[i][j] == 1) {
+            if (board2[i*width + j] == 1) {
                 cnt += sprintf(buff + cnt, "[]");
             } else {
                 cnt += sprintf(buff + cnt, " .");
@@ -655,14 +655,14 @@ void render2Player(Piece* piece1, Piece* piece2, int** board1, int** board2, cha
         int y = piece1->blocks[i]->y + piece1->y;
 
         if (x >= 0 && x < width && y >= 0 && y < height) {
-            board1[y][x] = 0;
+            board1[y*width + x] = 0;
         }
 
         x = piece2->blocks[i]->x + piece2->x;
         y = piece2->blocks[i]->y + piece2->y;
 
         if (x >= 0 && x < width && y >= 0 && y < height) {
-            board2[y][x] = 0;
+            board2[y*width + x] = 0;
         }
     }
 }

@@ -313,7 +313,9 @@ startGame:
         goto startGame;
     }
 
-    freeEverything(height, twoPlayer);
+    // do you want to reallocate everything at game reset?
+    // you'll need a different function here that resets the values of everything
+    freeEverything(twoPlayer);
 
     if (c == 'm') {
         goto mainMenu;

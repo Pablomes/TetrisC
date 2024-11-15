@@ -1,6 +1,9 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+// this is fine, but it won't get saved in the executable if you change it during execution,
+// if you want to have it save you might need to use a non-code file there's also probably
+// a way to actually save it in the executable, if you want to look for it 
 const int width = 10;
 const int height = 20;
 double timeForDrop;

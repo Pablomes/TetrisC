@@ -7,7 +7,7 @@
 #include <windows.h>
 
 // PLAYER 1
-extern int** board;
+extern int* board;
 extern Piece* piece;
 extern char* buff;
 extern PieceType* pieces;
@@ -23,7 +23,7 @@ extern int rubbish;
 
 // PLAYER 2
 
-extern int** board2;
+extern int* board2;
 extern Piece* piece2;
 extern char* buff2;
 extern PieceType* pieces2;
@@ -61,20 +61,20 @@ void checkInput(int gamemode);
 
 void shufflePieces(PieceType* pieces, int listNum);
 
-int spawnPiece(Piece* piece, int** board, PieceType* pieces, int hold, int height, int width, int player);
+int spawnPiece(Piece* piece, int* board, PieceType* pieces, int hold, int height, int width, int player);
 
-void rotatePiece(Piece* piece, int dir, int** board, int height, int width);
+void rotatePiece(Piece* piece, int dir, int* board, int height, int width);
 
-int addToBoard(Piece* piece, int** board, int height, int width);
+int addToBoard(Piece* piece, int* board, int height, int width);
 
-int checkBoard(int** board, int height, int width);
+int checkBoard(int* board, int height, int width);
 
-int updatePiece(Piece* piece, int dir, int drop, int** board, int height, int width);
+int updatePiece(Piece* piece, int dir, int drop, int* board, int height, int width);
 
-void freeEverything(int height, int gamemode);
+void freeEverything(int gamemode);
 
 int calcRubbish(int linesCleared);
 
-int addRubbish(int** board, int amount, int height, int width);
+int addRubbish(int* board, int amount, int height, int width);
 
 #endif
