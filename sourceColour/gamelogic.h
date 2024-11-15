@@ -1,5 +1,5 @@
 #ifndef GAMELOGIC_H
-#define GAME_LOGIC_H
+#define GAMELOGIC_H
 
 #include "utils.h"
 #include <conio.h>
