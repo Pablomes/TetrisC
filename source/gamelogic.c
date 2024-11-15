@@ -39,7 +39,7 @@ int running = 1;
 int twoPlayer = 0;
 double speeds[30] = {48, 43, 38, 33, 28, 23, 18, 13, 8, 6, 5, 5, 5, 4, 4, 4, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1};
 
-int initialiseMem(int height, int width) {
+int initialiseMem(int height, int width, int bufSize) {
     // calloc clears to 0
     glob_board = (int*) calloc(width * height, sizeof(int));
     
@@ -58,7 +58,7 @@ int initialiseMem(int height, int width) {
         return -1;
     }
 
-    buff = (char*) malloc(sizeof(char) * 5000);
+    buff = (char*) malloc(sizeof(char) * bufSize);
 
     if (buff == NULL) {
         printf("ERROR ALLOCATING MEMORY.");
@@ -663,19 +663,6 @@ void rotatePiece(Piece* piece, int dir, int* board, int height, int width) { // 
     movePiece(piece, piece->x - xOffset, piece->y - yOffset);
 }
 
-int addToBoard(Piece* piece, int* board, int height, int width) {
-    for (int i = 0; i < 4; i++) {
-        int x = piece->blocks[i]->x + piece->x;
-        int y = piece->blocks[i]->y + piece->y;
-
-        if (x < width && x >= 0 && y < height && y >= 0) {
-            board[y*width + x] = 1;
-        }
-    }
-
-    return 0;
-}
-
 int checkBoard(int* board, int height, int width) {
     int row = height - 1;
     int cleared = 0;
@@ -702,7 +689,7 @@ int checkBoard(int* board, int height, int width) {
     }
 
     for (int i = 0; i < width; i++) {
-        if (board[i] == 1) {
+        if (board[i] != 0) {
             return -2;
         }
     }
@@ -710,7 +697,7 @@ int checkBoard(int* board, int height, int width) {
     return cleared;
 }
 
-int updatePiece(Piece* piece, int dir, int drop, int* board, int height, int width) {
+int updatePiece(Piece* piece, int dir, int drop, int* board, int height, int width, int val) {
     int linesCleared = 0;
     int hardDrop = 0;
     int place = 0;
@@ -740,7 +727,7 @@ int updatePiece(Piece* piece, int dir, int drop, int* board, int height, int wid
             int blockPrevX = piece->x + piece->blocks[i]->x;
 
             //printf("(%d, %d)\n", newX + piece->blocks[i]->x, newY + piece->blocks[i]->y);
-            if (blockX >= width || blockX < 0 || (blockPrevY >= 0 && board[blockPrevY*width + blockX] == 1)) {
+            if (blockX >= width || blockX < 0 || (blockPrevY >= 0 && board[blockPrevY*width + blockX] != 0)) {
                 valid = 0;
             }
         
@@ -753,10 +740,10 @@ int updatePiece(Piece* piece, int dir, int drop, int* board, int height, int wid
                 place = 1;
                 placeStay = 1;
             } else {
-                if (blockY >= 0 && board[blockY*width + blockX] == 1) {
+                if (blockY >= 0 && board[blockY*width + blockX] != 0) {
                     place = 1;
                 }
-                if (blockY >= 0 && board[blockY*width + blockPrevX] == 1) {
+                if (blockY >= 0 && board[blockY*width + blockPrevX] != 0) {
                     placeStay = 1;
                 }
             }
@@ -777,7 +764,7 @@ int updatePiece(Piece* piece, int dir, int drop, int* board, int height, int wid
                 int y = piece->blocks[i]->y + piece->y;
 
                 if (x < width && x >= 0 && y < height && y >= 0) {
-                    board[y*width + x] = 1;
+                    board[y*width + x] = val;
                 }
             }
 
@@ -840,7 +827,7 @@ int calcRubbish(int lines) {
     return lines - 1;
 }
 
-int addRubbish(int* board, int amount, int height, int width) {
+int addRubbish(int* board, int amount, int height, int width, int rubbishVal) {
     
     for (int y = 0; y < height - amount; y++) {
         for (int x = 0; x < width; x++) {
@@ -853,7 +840,7 @@ int addRubbish(int* board, int amount, int height, int width) {
 
         for (int j = 0; j < width; j++) {
             if (j != k) {
-                board[i*width + j] = 1;
+                board[i*width + j] = rubbishVal;
             } else {
                 board[i*width + j] = 0;
             }

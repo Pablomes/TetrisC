@@ -3,7 +3,7 @@
 
 #include "gamelogic.h"
 #include <signal.h>
-#include "renderer.h"
+#include RENDERER
 #include <stdio.h>
 #include <stdlib.h>
 

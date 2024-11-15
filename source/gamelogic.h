@@ -34,7 +34,7 @@ typedef struct {
     Player players[2];
 } GameData;
 
-int initialiseMem(int height, int width);
+int initialiseMem(int height, int width, int bufSize);
 
 int initialiseMemPlayer2(int height, int width);
 
@@ -54,16 +54,14 @@ int spawnPiece(Piece* piece, int* board, PieceType* pieces, int hold, int height
 
 void rotatePiece(Piece* piece, int dir, int* board, int height, int width);
 
-int addToBoard(Piece* piece, int* board, int height, int width);
-
 int checkBoard(int* board, int height, int width);
 
-int updatePiece(Piece* piece, int dir, int drop, int* board, int height, int width);
+int updatePiece(Piece* piece, int dir, int drop, int* board, int height, int width, int val);
 
 void freeEverything(int gamemode);
 
 int calcRubbish(int linesCleared);
 
-int addRubbish(int* board, int amount, int height, int width);
+int addRubbish(int* board, int amount, int height, int width, int rubbishVal);
 
 #endif
