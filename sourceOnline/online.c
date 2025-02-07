@@ -119,29 +119,46 @@ void InitClient(int discoveryPort) {
 
 int DiscoverServer(u_long* servAddr) {
     char msg[] = "LETS PLAY TETRIS!";
+    int retryDelay = 2;
+    int discovered = 0;
 
-    if (sendto(discoverySock, msg, strlen(msg), 0, (SOCKADDR*)&discoveryAddr, sizeof(discoveryAddr)) == SOCKET_ERROR) {
-        ErrExit("sendto() error");
-    }
-    printf("Discovery message sent. Waiting for server response...\n");
+    struct timeval timeout;
+    fd_set readfds;
 
     int addrLen = sizeof(otherAddr);
     char buffer[100];
 
-    while (1) {
-        printf("Waiting for response...\n");
-        int recv_len = recvfrom(discoverySock, buffer, sizeof(buffer) - 1, 0, (SOCKADDR*)&otherAddr, &addrLen);
+    while (!discovered) {
 
-        if (recv_len > 0) {
-            buffer[recv_len] = '\0';
-            if (strncmp(buffer, "LETS GO:", 8) == 0) {
-                int port;
-                if (sscanf(buffer + 8, "%d", &port) == 1) {
-                    printf("Server discovered on port %d\n", port);
-                    *servAddr = otherAddr.sin_addr.s_addr;
-                    return port;
+        if (sendto(discoverySock, msg, strlen(msg), 0, (SOCKADDR*)&discoveryAddr, sizeof(discoveryAddr)) == SOCKET_ERROR) {
+            ErrExit("sendto() error");
+        }
+        printf("Discovery message sent. Waiting for server response...\n");
+
+        FD_ZERO(&readfds);
+        FD_SET(discoverySock, &readfds);
+
+        timeout.tv_sec = retryDelay;
+        timeout.tv_usec = 0;
+
+        int activity = select(0, &readfds, NULL, NULL, &timeout);
+
+        if (activity > 0) {
+            int recv_len = recvfrom(discoverySock, buffer, sizeof(buffer) - 1, 0, (SOCKADDR*)&otherAddr, &addrLen);
+
+            if (recv_len > 0) {
+                buffer[recv_len] = '\0';
+                if (strncmp(buffer, "LETS GO:", 8) == 0) {
+                    int port;
+                    if (sscanf(buffer + 8, "%d", &port) == 1) {
+                        printf("Server discovered on port %d\n", port);
+                        *servAddr = otherAddr.sin_addr.s_addr;
+                        return port;
+                   }
                }
-           }
+            }
+        } else {
+            printf("No server found. Trying again...\n");
         }
     }
 }

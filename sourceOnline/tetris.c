@@ -36,6 +36,20 @@ mainMenu:
         return 0;
     }
 
+    int admin = 0;
+
+    if (gameMode == ONLINE) {
+        admin = onlineMenu();
+
+        if (admin) {
+            ConnectAsServer();
+        } else {
+            ConnectAsClient();
+        }
+
+        clearConsole();
+    }
+
 startGame:
 
     initialiseGame(height, width);
@@ -51,7 +65,7 @@ startGame:
         level = levelMenu();
     }
 
-    int admin = 0;
+    /*int admin = 0;
 
     if (gameMode == ONLINE) {
         admin = onlineMenu();
@@ -63,7 +77,7 @@ startGame:
         }
 
         clearConsole();
-    }
+    }*/
 
     clock_t lastUpdate = clock();
     clock_t lastDrop = lastUpdate;
@@ -76,6 +90,7 @@ startGame:
     int useDropMult2 = 0;
 
     int send = 0;
+    int lost = 0;
 
     while (running) {
         clock_t current = clock();
@@ -260,6 +275,7 @@ startGame:
 
             if (res < 0) {
                 running = 0;
+                lost = 1;
                 winner = 2;
             } else if (res > 0) {
                 // ADD LINES
@@ -301,6 +317,7 @@ startGame:
 
             if (res < 0) {
                 running = 0;
+                lost = 1;
                 winner = 1;
             } else if (res > 0) {
                 // ADD LINES
@@ -314,7 +331,7 @@ startGame:
             }
         }
 
-        if (elapsed >= updateTime) {
+        if (elapsed >= updateTime || lost) {
 
             if (gameMode == ONLINE) {
 
@@ -348,6 +365,8 @@ startGame:
 
                 renderOnline(board, board2, buff, score, score2, linesCleared, linesCleared2, level, level2, pieces[pieceIdx], otherNextPiece, holdPiece, holdPiece2, rubbish, rubbish2, height, width);
 
+                printf("\n%d\n%d\n", running, otherRunning);
+
                 for (int i = 0; i < 4; i++) {
                     int x = piece->blocks[i]->x + piece->x;
                     int y = piece->blocks[i]->y + piece->y;
@@ -357,7 +376,10 @@ startGame:
                     }
                 }
 
-                if (otherRunning == 0  || running == 0) { break; }
+                if (otherRunning == 0  || running == 0) { 
+                    SendGameState(board, score, linesCleared, level, pieces[pieceIdx], holdPiece, rubbish, 0, running, admin, height, width);
+                    break;
+                }
 
             } else if (gameMode == TWOPLAYER) {
                 render2Player(piece, piece2, board, board2, buff, score, score2, linesCleared, linesCleared2, level, level2, pieces, pieces2, pieceIdx, pieceIdx2, holdPiece, holdPiece2, rubbish, rubbish2, height, width);
