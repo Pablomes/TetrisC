@@ -11,4 +11,8 @@ There's colour now.
 
 I might try online one of these days...
 
+I tried online. It works in local networks. You might need to give permissions to the app, depending on the ports you use. I swear it is only playing Tetris...
+
+I don't think I ever want to touch this project ever again, or maybe I will, just to clean up some stuff. But no more features, I think.
+
 Also found at https://mestredev.itch.io/
